@@ -1,0 +1,18 @@
+
+volumes:
+  app_node_modules:
+  app_vendor:
+
+services:
+  web:
+    image: vovimayhem/php-demo:development
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+
+      - app_node_modules:/var/www/html/node_modules
+      - app_vendor:/var/www/html/vendor
+
+

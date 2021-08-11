@@ -1,0 +1,8 @@
+
+services:
+  web:
+    image: vovimayhem/php-demo:testing
+    build:
+      context: .
+      dockerfile: Dockerfile
+

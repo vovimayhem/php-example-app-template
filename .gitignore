@@ -10,7 +10,6 @@
 permissions.sh
 local_deploy.sh
 server_deploy.sh
-docker-compose.override.yml
 Homestead.json
 Homestead.yaml
 npm-debug.log
