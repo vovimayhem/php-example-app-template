@@ -57,3 +57,12 @@ RUN ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
 
 # Instalar composer:
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+WORKDIR /var/www/html
+
+# Instalar Dependencias de la app ===============================
+COPY package*.json /var/www/html/
+RUN npm install
+
+COPY composer.* /var/www/html/
+RUN composer install --no-scripts --no-interaction --prefer-dist
