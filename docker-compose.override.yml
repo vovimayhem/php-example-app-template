@@ -9,6 +9,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      target: development
       args:
         DEVELOPER_UID: ${UID:-1000}
         DEVELOPER_USER: ${USER:-developer}

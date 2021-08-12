@@ -1,5 +1,5 @@
 # Lo minimo para que corra: ===============================
-FROM php:8-apache
+FROM php:8-apache AS runtime
 
 RUN echo 'APT::Acquire::Retries "3";' > /etc/apt/apt.conf.d/80-retries \
  && apt-get update \
@@ -23,6 +23,7 @@ RUN yes '' | pecl install -o -f redis \
  && docker-php-ext-enable redis
 
 # Dependencias de Testing: ===============================
+FROM runtime AS testing-base
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
@@ -69,15 +70,24 @@ RUN addgroup --gid ${DEVELOPER_UID} ${DEVELOPER_USER} \
  ;  useradd -r -m -u ${DEVELOPER_UID} --gid ${DEVELOPER_UID} \
     --shell /bin/bash -c "Developer User,,," ${DEVELOPER_USER}
 
+# Cambiarse al usuario desarrollador:
+USER ${DEVELOPER_USER}
+
+# Node Dependencies ============================================================
+FROM testing-base AS node-dependencies
+
 # Instalar Dependencias de la app ===============================
-COPY package*.json /var/www/html/
-RUN npm install
+COPY package.json yarn.lock /var/www/html/
+RUN yarn install
+
+# Composer Dependencies ========================================================
+FROM testing-base AS composer-dependencies
 
 COPY composer.* /var/www/html/
 RUN composer install --no-scripts --no-interaction --prefer-dist
 
-# Cambiarse al usuario desarrollador:
-USER ${DEVELOPER_USER}
+# Development: =================================================================
+FROM testing-base AS development
 
 # Cambiarse al usuario "root" para instalar las dependencias (incluyendo sudo)
 USER root
@@ -114,3 +124,6 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/command-hist
 
 # Cambiar al usuario desarrollador:
 USER ${DEVELOPER_USER}
+
+COPY --from=node-dependencies /var/www/html /var/www/html
+COPY --from=composer-dependencies /var/www/html /var/www/html
