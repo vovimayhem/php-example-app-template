@@ -9,6 +9,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        DEVELOPER_UID: ${UID:-1000}
+        DEVELOPER_USER: ${USER:-developer}
     volumes:
       - .:/var/www/html
 

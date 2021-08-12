@@ -60,9 +60,21 @@ COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 
 WORKDIR /var/www/html
 
+# Recibir el ID y el nombre del usuario desarrollador
+ARG DEVELOPER_UID=1000
+ARG DEVELOPER_USER=developer
+
+# Replicar el usuario dentro del container
+RUN addgroup --gid ${DEVELOPER_UID} ${DEVELOPER_USER} \
+ ;  useradd -r -m -u ${DEVELOPER_UID} --gid ${DEVELOPER_UID} \
+    --shell /bin/bash -c "Developer User,,," ${DEVELOPER_USER}
+
 # Instalar Dependencias de la app ===============================
 COPY package*.json /var/www/html/
 RUN npm install
 
 COPY composer.* /var/www/html/
 RUN composer install --no-scripts --no-interaction --prefer-dist
+
+# Cambiarse al usuario desarrollador:
+USER ${DEVELOPER_USER}
