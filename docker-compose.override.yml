@@ -17,6 +17,7 @@ services:
 
       - app_node_modules:/var/www/html/node_modules
       - app_vendor:/var/www/html/vendor
+    entrypoint: /var/www/html/bin/dev-entrypoint
     command: php artisan serve --host 0.0.0.0
     ports:
       - published: ${DEMO_WEB_PORT:-8000}
