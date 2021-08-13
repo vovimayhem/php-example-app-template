@@ -1,0 +1,21 @@
+{
+    // Comentario 1
+    "name": "Mi Demo PHP",
+
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "vs-compose.yml"
+    ],
+
+    "service": "demo",
+
+    "workspaceFolder": "/var/www/html",
+
+    "extensions": [
+      "bmewburn.vscode-intelephense-client",
+      "dbaeumer.vscode-eslint",
+      "mehedidracula.php-namespace-resolver",
+      "felixfbecker.php-debug",
+      "ryannaddy.laravel-artisan"
+    ]
+}

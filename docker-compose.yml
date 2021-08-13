@@ -32,3 +32,10 @@ services:
     ports:
       - published: ${DEMO_MAILHOG_HTTP_PORT:-8025}
         target: 8025
+
+  chrome:
+    image: browserless/chrome:latest
+    ports:
+      - ${DEMO_CHROME_PORT:-3000}:3000
+    environment:
+      CONNECTION_TIMEOUT: 6000000

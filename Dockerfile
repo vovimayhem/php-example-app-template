@@ -111,6 +111,11 @@ RUN apt-get install -y --no-install-recommends \
   # Sudo will be used to install/configure system stuff if needed during dev:
   sudo
 
+# Instalar xdebug
+RUN pecl install xdebug \
+ && mkdir -p /conf.d \
+ && docker-php-ext-enable xdebug
+
   # Agregar el usuario desarrollador a la lista de sudoers:
 RUN echo "${DEVELOPER_USER} ALL=(ALL) NOPASSWD:ALL" | tee "/etc/sudoers.d/${DEVELOPER_USER}"
 
