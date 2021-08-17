@@ -3,3 +3,6 @@
 *.scss linguist-vendored
 *.js linguist-vendored
 CHANGELOG.md export-ignore
+
+# Preservar los saltos de línea del script de entrypoint:
+bin/dev-entrypoint text eol=lf
