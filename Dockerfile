@@ -149,3 +149,18 @@ USER ${DEVELOPER_USER}
 
 COPY --from=node-dependencies /var/www/html /var/www/html
 COPY --from=composer-dependencies /var/www/html /var/www/html
+
+# Etapa Builder: ================================================================
+FROM testing AS builder
+
+USER root
+
+# Copiar el resto del código:
+COPY . /var/www/html
+
+RUN rm -rf /var/www/html/node_modules
+
+# Etapa Release: ========
+FROM runtime AS release
+
+COPY --from=builder --chown=www-data /var/www/html /var/www/html
