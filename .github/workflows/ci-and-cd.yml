@@ -78,6 +78,7 @@ jobs:
           context: .
           file: Dockerfile
           target: release
+          # push: true
           tags: vovimayhem/php-demo:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
