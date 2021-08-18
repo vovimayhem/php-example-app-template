@@ -55,7 +55,14 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Correr pruebas
-        run: docker-compose -f docker-compose.yml -f ci-compose.yml run tests
+        run: |-
+          pwd
+          id
+          whoami
+          ls -lah .
+          ls -lah tmp
+          docker-compose -f docker-compose.yml -f ci-compose.yml run tests ls -lah
+          docker-compose -f docker-compose.yml -f ci-compose.yml run tests
 
   build_release:
     name: Construir imagen desplegable
