@@ -24,8 +24,6 @@ services:
     depends_on:
       - mysql
       - redis
-      - mailhog
-      - chrome
     environment:
       APP_NAME: Demo
       APP_ENV: local
