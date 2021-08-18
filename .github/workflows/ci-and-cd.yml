@@ -61,6 +61,7 @@ jobs:
           whoami
           ls -lah .
           ls -lah tmp
+          docker-compose -f docker-compose.yml -f ci-compose.yml config
           docker-compose -f docker-compose.yml -f ci-compose.yml run tests ls -lah
           docker-compose -f docker-compose.yml -f ci-compose.yml run tests
 
