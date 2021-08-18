@@ -1,7 +1,6 @@
 # alias ci-compose="docker-compose -f docker-compose.yml -f ci-compose.yml"
 
 volumes:
-  app_tmp:
   app_node_modules:
   app_vendor:
 
@@ -17,7 +16,6 @@ services:
         DEVELOPER_USER: ${USER:-developer}
     volumes:
       - .:/var/www/html
-      - app_tmp:/var/www/html/tmp
       - app_node_modules:/var/www/html/node_modules
       - app_vendor:/var/www/html/vendor
     entrypoint: /var/www/html/bin/dev-entrypoint
