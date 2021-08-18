@@ -150,17 +150,24 @@ USER ${DEVELOPER_USER}
 COPY --from=node-dependencies /var/www/html /var/www/html
 COPY --from=composer-dependencies /var/www/html /var/www/html
 
-# Etapa Builder: ================================================================
+# BUILDER: ========================
 FROM testing AS builder
 
 USER root
 
-# Copiar el resto del código:
 COPY . /var/www/html
 
-RUN rm -rf /var/www/html/node_modules
+# RUN yarn run production
 
-# Etapa Release: ========
+RUN rm -rf node_modules tests
+
+RUN mv /var/www/html/config/default-apache-site.conf /etc/apache2/sites-available/000-default.conf
+
+# RELEASE: ================
+
 FROM runtime AS release
 
+WORKDIR /var/www/html
+
 COPY --from=builder --chown=www-data /var/www/html /var/www/html
+COPY --from=builder /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
