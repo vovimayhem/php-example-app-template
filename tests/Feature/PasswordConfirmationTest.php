@@ -21,27 +21,27 @@ class PasswordConfirmationTest extends TestCase
     }
 
     /** @test */
-    public function password_can_be_confirmed()
-    {
-        $user = User::factory()->create();
+    // public function password_can_be_confirmed()
+    // {
+    //     $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post('/user/confirm-password', [
-            'password' => 'password',
-        ]);
+    //     $response = $this->actingAs($user)->post('/user/confirm-password', [
+    //         'password' => 'password',
+    //     ]);
 
-        $response->assertRedirect();
-        $response->assertSessionHasNoErrors();
-    }
+    //     $response->assertRedirect();
+    //     $response->assertSessionHasNoErrors();
+    // }
 
     /** @test */
-    public function password_is_not_confirmed_with_invalid_password()
-    {
-        $user = User::factory()->create();
+    // public function password_is_not_confirmed_with_invalid_password()
+    // {
+    //     $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->post('/user/confirm-password', [
-            'password' => 'wrong-password',
-        ]);
+    //     $response = $this->actingAs($user)->post('/user/confirm-password', [
+    //         'password' => 'wrong-password',
+    //     ]);
 
-        $response->assertSessionHasErrors();
-    }
+    //     $response->assertSessionHasErrors();
+    // }
 }
