@@ -49,10 +49,12 @@ jobs:
           context: .
           file: Dockerfile
           target: testing
-          # load: true
+          load: true
           tags: vovimayhem/php-demo:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Correr pruebas
-        run: docker image ls
+        run: |-
+          docker image ls
+          docker-compose -f docker-compose.yml -f ci-compose.yml run tests
