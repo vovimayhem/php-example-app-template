@@ -33,7 +33,7 @@ jobs:
           context: .
           file: Dockerfile
           target: testing
-          build-args:
+          build-args: |
             DEVELOPER_UID=${{ steps.ci-vars.outputs.RUNNER_UID }}
             DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.RUNNER_USER }}
           tags: vovimayhem/php-demo:testing
@@ -65,7 +65,7 @@ jobs:
           context: .
           file: Dockerfile
           target: testing
-          build-args:
+          build-args: |
             DEVELOPER_UID=${{ steps.ci-vars.outputs.RUNNER_UID }}
             DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.RUNNER_USER }}
           load: true
@@ -104,7 +104,7 @@ jobs:
           context: .
           file: Dockerfile
           target: release
-          build-args:
+          build-args: |
             DEVELOPER_UID=${{ steps.ci-vars.outputs.RUNNER_UID }}
             DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.RUNNER_USER }}
           # push: true
