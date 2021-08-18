@@ -26,7 +26,7 @@ jobs:
           context: .
           file: Dockerfile
           target: testing
-          tags: vovimayhem/php-demo:latest
+          tags: vovimayhem/php-demo:testing
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -50,7 +50,7 @@ jobs:
           file: Dockerfile
           target: testing
           load: true
-          tags: vovimayhem/php-demo:latest
+          tags: vovimayhem/php-demo:testing
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
