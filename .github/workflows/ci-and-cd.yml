@@ -166,10 +166,11 @@ jobs:
             QUEUE_CONNECTION=sync,
             SESSION_DRIVER=redis,
             SESSION_LIFETIME=120,
-            REDIS_HOST=redis,
+            REDIS_HOST=10.152.52.243,
             REDIS_PASSWORD=null,
             REDIS_PORT=6379
           flags: |-
             --allow-unauthenticated
             --service-account php-demo@cerouno-devops-2107-gcp-demo.iam.gserviceaccount.com
             --add-cloudsql-instances cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1
+            --vpc-connector projects/cerouno-devops-2107-gcp-demo/global/networks/default
