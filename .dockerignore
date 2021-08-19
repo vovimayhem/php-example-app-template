@@ -1,3 +1,6 @@
 /.git
 
 **/*.env
+
+# Ignore google cloud credentials:
+google-cloud-credentials.json

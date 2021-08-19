@@ -18,3 +18,6 @@ yarn-error.log
 # Ignorar folder de tmp, pero preservar archivo .keep:
 tmp/*
 !tmp/.keep
+
+# Ignore google cloud credentials:
+google-cloud-credentials.json
