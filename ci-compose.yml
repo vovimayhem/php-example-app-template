@@ -16,7 +16,6 @@ services:
         DEVELOPER_USER: ${USER:-developer}
     volumes:
       - .:/var/www/html
-
       - app_node_modules:/var/www/html/node_modules
       - app_vendor:/var/www/html/vendor
     entrypoint: /var/www/html/bin/dev-entrypoint
@@ -24,8 +23,6 @@ services:
     depends_on:
       - mysql
       - redis
-      - mailhog
-      - chrome
     environment:
       APP_NAME: Demo
       APP_ENV: local

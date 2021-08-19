@@ -31,6 +31,12 @@ ensure_vendored_deps_are_installed() {
   composer install --no-interaction --no-scripts --prefer-dist
 }
 
+ensure_tmp_directory_belongs_to_user() {
+  if [ "$(stat -c '%U' tmp)" != "$(whoami)" ]
+  then sudo chown -R $(whoami) tmp
+  fi
+}
+
 clear_any_existing_cached_configuration() {
   php artisan config:clear
 }
@@ -64,6 +70,7 @@ then
 
   ensure_node_modules_are_installed
   ensure_vendored_deps_are_installed
+  ensure_tmp_directory_belongs_to_user
 
   clear_any_existing_cached_configuration
   ensure_framework_is_optimized

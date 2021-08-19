@@ -21,55 +21,55 @@ class PasswordResetTest extends TestCase
     }
 
     /** @test */
-    public function reset_password_link_can_be_requested()
-    {
-        Notification::fake();
+    // public function reset_password_link_can_be_requested()
+    // {
+    //     Notification::fake();
 
-        $user = User::factory()->create();
+    //     $user = User::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+    //     $this->post('/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class);
-    }
-
-    /** @test */
-    public function reset_password_screen_can_be_rendered()
-    {
-        Notification::fake();
-
-        $user = User::factory()->create();
-
-        $this->post('/forgot-password', ['email' => $user->email]);
-
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-            $response = $this->get('/reset-password/'.$notification->token);
-
-            $response->assertStatus(200);
-
-            return true;
-        });
-    }
+    //     Notification::assertSentTo($user, ResetPassword::class);
+    // }
 
     /** @test */
-    public function password_can_be_reset_with_valid_token()
-    {
-        Notification::fake();
+    // public function reset_password_screen_can_be_rendered()
+    // {
+    //     Notification::fake();
 
-        $user = User::factory()->create();
+    //     $user = User::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+    //     $this->post('/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-            $response = $this->post('/reset-password', [
-                'token' => $notification->token,
-                'email' => $user->email,
-                'password' => 'password',
-                'password_confirmation' => 'password',
-            ]);
+    //     Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
+    //         $response = $this->get('/reset-password/'.$notification->token);
 
-            $response->assertSessionHasNoErrors();
+    //         $response->assertStatus(200);
 
-            return true;
-        });
-    }
+    //         return true;
+    //     });
+    // }
+
+    /** @test */
+    // public function password_can_be_reset_with_valid_token()
+    // {
+    //     Notification::fake();
+
+    //     $user = User::factory()->create();
+
+    //     $this->post('/forgot-password', ['email' => $user->email]);
+
+    //     Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+    //         $response = $this->post('/reset-password', [
+    //             'token' => $notification->token,
+    //             'email' => $user->email,
+    //             'password' => 'password',
+    //             'password_confirmation' => 'password',
+    //         ]);
+
+    //         $response->assertSessionHasNoErrors();
+
+    //         return true;
+    //     });
+    // }
 }

@@ -1,0 +1,96 @@
+name: CI and CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_test_image:
+    name: Construir Imagen de Pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener variables útiles
+        id: ci-vars
+        uses: icalia-actions/common-variables@v0.0.3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Test Image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          target: testing
+          build-args: |
+            DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
+            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
+          tags: vovimayhem/php-demo:testing
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  run_tests:
+    name: Correr Pruebas
+    runs-on: ubuntu-latest
+    needs:
+      - build_test_image
+    steps:
+      - name: Obtener variables útiles
+        id: ci-vars
+        uses: icalia-actions/common-variables@v0.0.3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Load Test Image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          target: testing
+          build-args: |
+            DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
+            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
+          load: true
+          tags: vovimayhem/php-demo:testing
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Correr pruebas
+        env:
+          UID: ${{ steps.ci-vars.outputs.runner-uid }}
+          USER: ${{ steps.ci-vars.outputs.runner-user }}
+        uses: icalia-actions/run-ci-compose@v0.0.2
+        with:
+          service-name: tests
+
+  build_release:
+    name: Construir imagen desplegable
+    runs-on: ubuntu-latest
+    needs:
+      - build_test_image
+    steps:
+      - name: Obtener variables útiles
+        id: ci-vars
+        uses: icalia-actions/common-variables@v0.0.3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and push release image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          target: release
+          build-args: |
+            DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
+            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
+          # push: true
+          tags: vovimayhem/php-demo:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

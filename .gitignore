@@ -14,3 +14,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+
+# Ignorar folder de tmp, pero preservar archivo .keep:
+tmp/*
+!tmp/.keep
