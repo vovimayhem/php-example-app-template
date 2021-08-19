@@ -63,9 +63,11 @@ jobs:
 
       - name: Correr pruebas
         env:
-          UID: ${{ steps.ci-vars.RUNNER_UID }}
-          USER: ${{ steps.ci-vars.RUNNER_USER }}
-        run: docker-compose -f docker-compose.yml -f ci-compose.yml run tests
+          UID: ${{ steps.ci-vars.outputs.runner-uid }}
+          USER: ${{ steps.ci-vars.outputs.runner-user }}
+        uses: icalia-actions/run-ci-compose@v0.0.2
+        with:
+          service-name: tests
 
   build_release:
     name: Construir imagen desplegable
