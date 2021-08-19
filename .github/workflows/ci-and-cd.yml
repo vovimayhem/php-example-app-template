@@ -13,12 +13,9 @@ jobs:
     name: Construir Imagen de Pruebas
     runs-on: ubuntu-latest
     steps:
-      # Ver https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#using-workflow-commands-to-access-toolkit-functions
       - name: Obtener variables útiles
         id: ci-vars
-        run: |-
-          echo "::set-output name=RUNNER_UID::$(id -u)"
-          echo "::set-output name=RUNNER_USER::$(whoami)"
+        uses: icalia-actions/common-variables@v0.0.3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -29,8 +26,8 @@ jobs:
         with:
           target: testing
           build-args: |
-            DEVELOPER_UID=${{ steps.ci-vars.outputs.RUNNER_UID }}
-            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.RUNNER_USER }}
+            DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
+            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
           tags: vovimayhem/php-demo:testing
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -43,9 +40,7 @@ jobs:
     steps:
       - name: Obtener variables útiles
         id: ci-vars
-        run: |-
-          echo "::set-output name=RUNNER_UID::$(id -u)"
-          echo "::set-output name=RUNNER_USER::$(whoami)"
+        uses: icalia-actions/common-variables@v0.0.3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -56,8 +51,8 @@ jobs:
         with:
           target: testing
           build-args: |
-            DEVELOPER_UID=${{ steps.ci-vars.outputs.RUNNER_UID }}
-            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.RUNNER_USER }}
+            DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
+            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
           load: true
           tags: vovimayhem/php-demo:testing
           cache-from: type=gha
@@ -80,9 +75,7 @@ jobs:
     steps:
       - name: Obtener variables útiles
         id: ci-vars
-        run: |-
-          echo "::set-output name=RUNNER_UID::$(id -u)"
-          echo "::set-output name=RUNNER_USER::$(whoami)"
+        uses: icalia-actions/common-variables@v0.0.3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -93,8 +86,8 @@ jobs:
         with:
           target: release
           build-args: |
-            DEVELOPER_UID=${{ steps.ci-vars.outputs.RUNNER_UID }}
-            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.RUNNER_USER }}
+            DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
+            DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
           # push: true
           tags: vovimayhem/php-demo:latest
           cache-from: type=gha
