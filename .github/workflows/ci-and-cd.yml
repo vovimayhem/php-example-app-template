@@ -184,6 +184,13 @@ jobs:
       - build_release
     steps:
       - name: Revisar docker compose
-        run: docker compose
+        run: |-
+          wget \
+            --output-file=~/.docker/cli-plugins/docker-compose \
+            https://github.com/docker/compose-cli/releases/download/v2.0.0-rc.1/docker-compose-linux-amd64
+
+          chmod 755 ~/.docker/cli-plugins/docker-compose
+
+          docker compose version
 
 
