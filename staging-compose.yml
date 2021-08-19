@@ -18,6 +18,8 @@ services:
       - redis
       - mailhog
     environment:
+      PORT: "80"
+
       APP_NAME: Demo
       APP_ENV: local
       APP_KEY: ${APP_KEY:-base64:vZqr5Aje1wUQf2LaixbR33XC+t2asy4iaf844QfO+Uc=}

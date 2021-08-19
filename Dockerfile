@@ -171,3 +171,5 @@ WORKDIR /var/www/html
 
 COPY --from=builder --chown=www-data /var/www/html /var/www/html
 COPY --from=builder /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+ENTRYPOINT [ "/var/www/html/bin/entrypoint" ]

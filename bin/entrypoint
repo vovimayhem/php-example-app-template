@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# The Docker App Container's entrypoint.
+# This is a script is run on the "production" container to configure apache to
+# listen to the port specified by the PORT environment variable, which is
+# required by several container-as-a-service providers such as Google Cloud Run
+# or Heroku
+set -e
+
+configure_apache_port() {
+  if [ -n "${PORT+x}" ]; then
+    sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
+    sed -i "s/VirtualHost \*:80/VirtualHost \*:${PORT}/" /etc/apache2/sites-available/000-default.conf
+  fi
+}
+
+# first arg is `-f` or `--some-option`
+if [ "${1#-}" != "$1" ]; then set -- apache2-foreground "$@"; fi
+
+if [ -z "$1" ]; then set -- apache2-foreground "$@"; fi
+
+if [ "$1" = "apache2-foreground" ]; then
+  configure_apache_port
+fi
+
+# Execute the command:
+exec "$@"
