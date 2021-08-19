@@ -187,7 +187,7 @@ jobs:
     #   - build_release
     steps:
       - name: Descargar Compose CLI
-        run:
+        run: |-
           echo ${HOME}
           mkdir -p ${HOME}/.docker/cli-plugins
           wget --output-file=${HOME}/.docker/cli-plugins/docker-compose https://github.com/docker/compose-cli/releases/download/v2.0.0-rc.1/docker-compose-linux-amd64
