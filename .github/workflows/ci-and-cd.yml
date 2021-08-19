@@ -82,6 +82,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Configure Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: cerouno-devops-2107-gcp-demo
+          service_account_key: ${{ secrets.DEPLOYER_GCP_KEY }}
+
+      - name: Authorize push to Google Cloud Container Registry
+        run: gcloud auth configure-docker
+
       - name: Build and push release image
         id: docker_build
         uses: docker/build-push-action@v2
@@ -90,7 +99,78 @@ jobs:
           build-args: |
             DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
             DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
-          # push: true
-          tags: vovimayhem/php-demo:latest
+          push: true
+          tags: gcr.io/cerouno-devops-2107-gcp-demo/php-demo:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  deploy:
+    name: Desplegar a produccion
+    runs-on: ubuntu-latest
+    needs:
+      - run_tests
+      - build_release
+    steps:
+      - name: Obtener variables útiles
+        id: ci-vars
+        uses: icalia-actions/common-variables@v0.0.3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Configure Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: "297.0.1" # Avoid https://github.com/google-github-actions/setup-gcloud/issues/128
+          project_id: cerouno-devops-2107-gcp-demo
+          service_account_key: ${{ secrets.DEPLOYER_GCP_KEY }}
+          export_default_credentials: true
+          credentials_file_path: google-cloud-credentials.json
+
+      - name: Authorize push to Google Cloud Container Registry
+        run: gcloud auth configure-docker
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Correr las migraciones
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        uses: icalia-actions/run-ci-compose@v0.0.2
+        with:
+          service-name: migrations
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          service: php-demo
+          image: gcr.io/cerouno-devops-2107-gcp-demo/php-demo:latest
+          region: us-central1
+          project_id: cerouno-devops-2107-gcp-demo
+          env_vars: |-
+            APP_NAME=Demo,
+            APP_ENV=production,
+            APP_KEY=base64:vZqr5Aje1wUQf2LaixbR33XC+t2asy4iaf844QfO+Uc=,
+            APP_DEBUG=true,
+            APP_LOG_LEVEL=debug,
+            LOG_CHANNEL=stack,
+            LOG_LEVEL=debug,
+            DB_CONNECTION=mysql,
+            DB_SOCKET=/cloudsql/cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1,
+            DB_DATABASE=demo_production,
+            DB_USERNAME=root,
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }},
+            BROADCAST_DRIVER=log,
+            CACHE_DRIVER=redis,
+            QUEUE_CONNECTION=sync,
+            SESSION_DRIVER=redis,
+            SESSION_LIFETIME=120,
+            REDIS_HOST=10.152.52.243,
+            REDIS_PASSWORD=null,
+            REDIS_PORT=6379
+          flags: |-
+            --allow-unauthenticated
+            --service-account php-demo@cerouno-devops-2107-gcp-demo.iam.gserviceaccount.com
+            --add-cloudsql-instances cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1
+            --vpc-connector projects/cerouno-devops-2107-gcp-demo/global/networks/default
