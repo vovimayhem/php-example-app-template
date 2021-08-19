@@ -167,9 +167,16 @@ RUN mv /var/www/html/config/default-apache-site.conf /etc/apache2/sites-availabl
 
 FROM runtime AS release
 
+# Copiar las extensiones de PHP que instalamos:
+COPY --from=builder /usr/local/lib/php/extensions /usr/local/lib/php/extensions
+COPY --from=builder /usr/local/etc/php/conf.d /usr/local/etc/php/conf.d
+
 WORKDIR /var/www/html
 
+# Copiar el código:
 COPY --from=builder --chown=www-data /var/www/html /var/www/html
+
+# Copiar la configuracion de Apache
 COPY --from=builder /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 ENTRYPOINT [ "/var/www/html/bin/entrypoint" ]
