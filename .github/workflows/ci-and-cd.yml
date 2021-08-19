@@ -198,6 +198,6 @@ jobs:
           aws-region: us-east-1
 
       - name: Create Docker Context
-        run: docker context create ecs myecscontext
+        run: docker context create ecs myecscontext --from-env
 
 
