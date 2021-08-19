@@ -5,6 +5,16 @@ volumes:
   app_vendor:
 
 services:
+  cloudsql:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.23.0-alpine
+    command: /cloud_sql_proxy -instances=cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1=tcp:0.0.0.0:3306
+    ports:
+      - 127.0.0.1:${DEMO_CLOUDSQL_MYSQL_PORT:-3306}:3306
+    volumes:
+      - ./google-cloud-credentials.json:/config/google-cloud-credentials.json
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /config/google-cloud-credentials.json
+
   tests:
     image: vovimayhem/php-demo:testing
     build:
