@@ -121,8 +121,11 @@ jobs:
       - name: Configure Google Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
+          version: "297.0.1" # Avoid https://github.com/google-github-actions/setup-gcloud/issues/128
           project_id: cerouno-devops-2107-gcp-demo
           service_account_key: ${{ secrets.DEPLOYER_GCP_KEY }}
+          export_default_credentials: true
+          credentials_file_path: google-cloud-credentials.json
 
       - name: Authorize push to Google Cloud Container Registry
         run: gcloud auth configure-docker
