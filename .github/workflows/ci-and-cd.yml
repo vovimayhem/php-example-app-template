@@ -200,4 +200,7 @@ jobs:
       - name: Create Docker Context
         run: docker context create ecs myecscontext --from-env
 
+      - name: Deploy
+        run: docker compose --project-name demo -f .aws/docker-compose.yml up
+
 
