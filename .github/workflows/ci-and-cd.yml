@@ -104,12 +104,13 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy:
-    name: Desplegar a produccion
+  deploy_to_gcp:
+    name: Desplegar a GCP
     runs-on: ubuntu-latest
     needs:
       - run_tests
       - build_release
+    if: ${{ false }}
     steps:
       - name: Obtener variables útiles
         id: ci-vars
@@ -174,3 +175,15 @@ jobs:
             --service-account php-demo@cerouno-devops-2107-gcp-demo.iam.gserviceaccount.com
             --add-cloudsql-instances cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1
             --vpc-connector projects/cerouno-devops-2107-gcp-demo/global/networks/default
+
+  deploy_to_aws:
+    name: Desplegar a AWS
+    runs-on: ubuntu-latest
+    needs:
+      - run_tests
+      - build_release
+    steps:
+      - name: Revisar docker compose
+        run: docker compose
+
+
