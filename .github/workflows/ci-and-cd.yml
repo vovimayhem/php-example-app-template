@@ -133,10 +133,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Correr las migraciones
-        env:
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        uses: icalia-actions/run-ci-compose@v0.0.2
-        with:
-          service-name: migrations
+      # - name: Correr las migraciones
+      #   env:
+      #     DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      #   uses: icalia-actions/run-ci-compose@v0.0.2
+      #   with:
+      #     service-name: migrations
 
