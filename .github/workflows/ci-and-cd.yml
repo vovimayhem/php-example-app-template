@@ -148,29 +148,28 @@ jobs:
           image: gcr.io/cerouno-devops-2107-gcp-demo/php-demo:latest
           region: us-central1
           project_id: cerouno-devops-2107-gcp-demo
-        env_vars: |-
-          APP_NAME=Demo,
-          APP_ENV=production,
-          APP_KEY=base64:vZqr5Aje1wUQf2LaixbR33XC+t2asy4iaf844QfO+Uc=,
-          APP_DEBUG=true,
-          APP_LOG_LEVEL=debug,
-          LOG_CHANNEL=stack,
-          LOG_LEVEL=debug,
-          DB_CONNECTION=mysql,
-          DB_HOST=mysql,
-          DB_PORT=3306,
-          DB_DATABASE=demo_production,
-          DB_USERNAME=root,
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }},
-          BROADCAST_DRIVER=log,
-          CACHE_DRIVER=redis,
-          QUEUE_CONNECTION=sync,
-          SESSION_DRIVER=redis,
-          SESSION_LIFETIME=120,
-          REDIS_HOST=redis,
-          REDIS_PASSWORD=null,
-          REDIS_PORT=6379
-        flags: |-
-          --allow-unauthenticated
-          --service-account php-demo@cerouno-devops-2107-gcp-demo.iam.gserviceaccount.com
-          --add-cloudsql-instances cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1
+          env_vars: |-
+            APP_NAME=Demo,
+            APP_ENV=production,
+            APP_KEY=base64:vZqr5Aje1wUQf2LaixbR33XC+t2asy4iaf844QfO+Uc=,
+            APP_DEBUG=true,
+            APP_LOG_LEVEL=debug,
+            LOG_CHANNEL=stack,
+            LOG_LEVEL=debug,
+            DB_CONNECTION=mysql,
+            DB_SOCKET=/cloudsql/cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1,
+            DB_DATABASE=demo_production,
+            DB_USERNAME=root,
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }},
+            BROADCAST_DRIVER=log,
+            CACHE_DRIVER=redis,
+            QUEUE_CONNECTION=sync,
+            SESSION_DRIVER=redis,
+            SESSION_LIFETIME=120,
+            REDIS_HOST=redis,
+            REDIS_PASSWORD=null,
+            REDIS_PORT=6379
+          flags: |-
+            --allow-unauthenticated
+            --service-account php-demo@cerouno-devops-2107-gcp-demo.iam.gserviceaccount.com
+            --add-cloudsql-instances cerouno-devops-2107-gcp-demo:us-central1:mysql-prueba-1
