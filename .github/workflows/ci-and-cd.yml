@@ -82,6 +82,15 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Configure Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: cerouno-devops-2107-gcp-demo
+          service_account_key: ${{ secrets.DEPLOYER_GCP_KEY }}
+
+      - name: Authorize push to Google Cloud Container Registry
+        run: gcloud auth configure-docker
+
       - name: Build and push release image
         id: docker_build
         uses: docker/build-push-action@v2
@@ -90,7 +99,7 @@ jobs:
           build-args: |
             DEVELOPER_UID=${{ steps.ci-vars.outputs.runner-uid }}
             DEVELOPER_USERNAME=${{ steps.ci-vars.outputs.runner-user }}
-          # push: true
-          tags: vovimayhem/php-demo:latest
+          push: true
+          tags: gcr.io/cerouno-devops-2107-gcp-demo/php-demo:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
