@@ -12,6 +12,7 @@ jobs:
   build_test_image:
     name: Construir Imagen de Pruebas
     runs-on: ubuntu-latest
+    if: ${{ false }}
     steps:
       - name: Obtener variables útiles
         id: ci-vars
@@ -37,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - build_test_image
+    if: ${{ false }}
     steps:
       - name: Obtener variables útiles
         id: ci-vars
@@ -72,6 +74,7 @@ jobs:
   build_release:
     name: Construir imagen desplegable
     runs-on: ubuntu-latest
+    if: ${{ false }}
     needs:
       - build_test_image
     steps:
@@ -185,7 +188,9 @@ jobs:
     steps:
       - name: Descargar Compose CLI
         run:
-          wget --output-file=~/.docker/cli-plugins/docker-compose https://github.com/docker/compose-cli/releases/download/v2.0.0-rc.1/docker-compose-linux-amd64
+          echo ${HOME}
+          mkdir -p ${HOME}/.docker/cli-plugins
+          wget --output-file=${HOME}/.docker/cli-plugins/docker-compose https://github.com/docker/compose-cli/releases/download/v2.0.0-rc.1/docker-compose-linux-amd64
           chmod 755 ~/.docker/cli-plugins/docker-compose
           docker compose version
 
