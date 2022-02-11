@@ -20,7 +20,7 @@
     "dependencies": {
         "alpinejs": "^2.8.0",
         "autoprefixer": "^10.1.0",
-        "node-sass": "^5.0.0",
+        "node-sass": "^7.0.0",
         "postcss": "^8.2.2",
         "sass": "^1.32.0",
         "sass-loader": "^10.1.0",
